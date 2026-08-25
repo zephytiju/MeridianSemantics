@@ -1,0 +1,42 @@
+{
+  "$comment": "SPDX-License-Identifier: Apache-2.0",
+  "$id": "https://github.com/zephytiju/meridian-storage-semantics/contracts/logical-schema/meridian.object.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Meridian V1 Object metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["formatVersion", "objectRef", "digest", "byteLength", "mediaType", "createdAt", "creationContext", "userMetadata", "mutability", "provenance"],
+  "properties": {
+    "formatVersion": { "const": "meridian.object.v1" },
+    "objectRef": {
+      "type": "object",
+      "required": ["resourceRef", "objectId"],
+      "properties": {
+        "resourceRef": {
+          "type": "object",
+          "required": ["catalog", "namespace", "name"],
+          "properties": {
+            "catalog": { "const": "object" },
+            "namespace": { "type": "string", "pattern": "^[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" },
+            "name": { "type": "string", "pattern": "^[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" }
+          },
+          "additionalProperties": false
+        },
+        "objectId": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "digest": { "$ref": "#/$defs/digest" }
+      },
+      "additionalProperties": false
+    },
+    "digest": { "$ref": "#/$defs/digest" },
+    "byteLength": { "type": "integer", "minimum": 0 },
+    "mediaType": { "type": "string", "pattern": "^[^/ ]+/[^/ ]+$" },
+    "createdAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z$" },
+    "creationContext": { "type": "object" },
+    "userMetadata": { "type": "object", "maxProperties": 128, "additionalProperties": { "type": "string" } },
+    "mutability": { "enum": ["immutable", "mutable"] },
+    "provenance": { "type": "object" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+  }
+}

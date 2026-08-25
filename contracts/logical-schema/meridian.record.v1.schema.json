@@ -1,0 +1,36 @@
+{
+  "$comment": "SPDX-License-Identifier: Apache-2.0",
+  "$id": "https://github.com/zephytiju/meridian-storage-semantics/contracts/logical-schema/meridian.record.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Meridian V1 Record wire value",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["formatVersion", "collectionRef", "recordId", "recordVersion", "values", "createdAt", "updatedAt"],
+  "properties": {
+    "formatVersion": { "const": "meridian.record.v1" },
+    "collectionRef": { "$ref": "#/$defs/resourceRef" },
+    "recordId": {
+      "oneOf": [
+        { "type": ["string", "integer", "number", "boolean"] },
+        { "type": "array", "minItems": 1, "items": { "type": ["string", "integer", "number", "boolean"] } }
+      ]
+    },
+    "recordVersion": { "type": ["string", "integer"] },
+    "values": { "type": "object" },
+    "createdAt": { "$ref": "#/$defs/timestamp" },
+    "updatedAt": { "$ref": "#/$defs/timestamp" }
+  },
+  "$defs": {
+    "resourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalog", "namespace", "name"],
+      "properties": {
+        "catalog": { "const": "structured" },
+        "namespace": { "type": "string", "pattern": "^[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" },
+        "name": { "type": "string", "pattern": "^[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" }
+      }
+    },
+    "timestamp": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z$" }
+  }
+}

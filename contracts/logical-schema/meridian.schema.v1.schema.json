@@ -1,0 +1,212 @@
+{
+  "$comment": "SPDX-License-Identifier: Apache-2.0",
+  "$id": "https://github.com/zephytiju/meridian-storage-semantics/contracts/logical-schema/meridian.schema.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Meridian V1 canonical logical Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "id",
+    "version",
+    "semanticKind",
+    "fields",
+    "identity",
+    "constraints",
+    "indexes",
+    "consistency",
+    "retentionLabel",
+    "auditPolicy",
+    "lineagePolicy",
+    "cachePolicy",
+    "extensions",
+    "compatibility",
+    "fingerprint"
+  ],
+  "properties": {
+    "formatVersion": { "const": "meridian.schema.v1" },
+    "id": { "$ref": "#/$defs/logicalId" },
+    "version": { "$ref": "#/$defs/semver" },
+    "semanticKind": {
+      "enum": [
+        "relational",
+        "document",
+        "key-value",
+        "search",
+        "geospatial",
+        "time-series",
+        "relation",
+        "object",
+        "artifact",
+        "media",
+        "cache"
+      ]
+    },
+    "fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/field" }
+    },
+    "identity": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/unicodeName" }
+    },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "indexes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/index" }
+    },
+    "consistency": { "enum": ["strong", "session", "eventual"] },
+    "retentionLabel": { "$ref": "#/$defs/unicodeName" },
+    "auditPolicy": { "type": "object" },
+    "lineagePolicy": { "type": "object" },
+    "cachePolicy": { "type": "object" },
+    "extensions": { "$ref": "#/$defs/extensions" },
+    "compatibility": { "type": "object" },
+    "fingerprint": { "$ref": "#/$defs/fingerprint" }
+  },
+  "$defs": {
+    "unicodeName": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "logicalId": {
+      "type": "string",
+      "pattern": "^(structured|object|cache|evidence|streaming):[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?\\.[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "fingerprint": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "logicalType": {
+      "oneOf": [
+        {
+          "enum": [
+            "boolean",
+            "int8",
+            "int16",
+            "int32",
+            "int64",
+            "float64",
+            "string",
+            "bytes",
+            "uuid",
+            "utcTimestamp",
+            "date",
+            "duration",
+            "json",
+            "recordRef",
+            "objectRef",
+            "wgs84Point"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "precision", "scale"],
+          "properties": {
+            "kind": { "const": "decimal" },
+            "precision": { "type": "integer", "minimum": 1, "maximum": 1000 },
+            "scale": { "type": "integer", "minimum": 0, "maximum": 1000 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "values"],
+          "properties": {
+            "kind": { "const": "enum" },
+            "values": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": { "type": "string" }
+            }
+          }
+        }
+      ]
+    },
+    "defaultExpression": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["kind", "arguments"],
+      "properties": {
+        "kind": { "enum": ["literal", "field", "concat", "coalesce", "lower", "upper"] },
+        "arguments": true
+      }
+    },
+    "localizedText": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["defaultLocale", "messages"],
+      "properties": {
+        "defaultLocale": { "type": "string", "pattern": "^[A-Za-z]{2,8}(?:-[A-Za-z0-9]{1,8})*$" },
+        "messages": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 16384 }
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "logicalType",
+        "cardinality",
+        "nullable",
+        "defaultExpression",
+        "mutable",
+        "constraints",
+        "sensitivityLabels",
+        "documentation",
+        "annotations"
+      ],
+      "properties": {
+        "name": { "$ref": "#/$defs/unicodeName" },
+        "logicalType": { "$ref": "#/$defs/logicalType" },
+        "cardinality": { "enum": ["one", "many"] },
+        "nullable": { "type": "boolean" },
+        "defaultExpression": { "$ref": "#/$defs/defaultExpression" },
+        "mutable": { "type": "boolean" },
+        "constraints": { "type": "object" },
+        "sensitivityLabels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/unicodeName" }
+        },
+        "documentation": { "$ref": "#/$defs/localizedText" },
+        "annotations": { "$ref": "#/$defs/extensions" }
+      }
+    },
+    "index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind", "fields", "unique", "options"],
+      "properties": {
+        "name": { "$ref": "#/$defs/unicodeName" },
+        "kind": { "enum": ["btree", "hash", "full-text", "geospatial", "time-series", "relation-endpoint"] },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/unicodeName" }
+        },
+        "unique": { "type": "boolean" },
+        "options": { "type": "object" }
+      }
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "anyOf": [
+          { "pattern": "^[A-Za-z][A-Za-z0-9+.-]*://" },
+          { "pattern": "^[A-Za-z0-9.-]+\\.[A-Za-z0-9.-]+/" }
+        ]
+      }
+    }
+  }
+}

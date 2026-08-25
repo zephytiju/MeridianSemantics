@@ -30,7 +30,11 @@ dependencies = ["meridian-storage-core==1.0.0"]
 test = [
   "build>=1.2,<2",
   "hatchling==1.27.0",
+  "hypothesis>=6.135,<7",
+  "jsonschema>=4.23,<5",
+  "mypy>=1.15,<2",
   "pytest>=8.3,<10",
+  "pytest-cov>=6,<8",
   "ruff>=0.11,<1",
 ]
 
@@ -39,23 +43,69 @@ Documentation = "https://github.com/zephytiju/meridian-storage-semantics#readme"
 Issues = "https://github.com/zephytiju/meridian-storage-semantics/issues"
 Repository = "https://github.com/zephytiju/meridian-storage-semantics"
 
+[project.entry-points."meridian_storage.catalogs"]
+cache = "meridian_storage.semantics.catalogs:CacheCatalogProvider"
+structured = "meridian_storage.semantics.catalogs:StructuredCatalogProvider"
+
+[project.entry-points."meridian_storage.schemas"]
+semantics = "meridian_storage.semantics.publication:SemanticsSchemaProvider"
+
+[tool.hatch.build]
+include = [
+  "src/meridian_storage/semantics/**",
+  "contracts/**",
+  "docs/**",
+  "compatibility.json",
+  "LICENSE",
+  "NOTICE",
+  "README.md",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/meridian_storage"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"contracts" = "meridian_storage/semantics/contracts"
+"compatibility.json" = "meridian_storage/semantics/compatibility.json"
 
 [tool.hatch.build.targets.sdist]
 include = [
   "/src",
   "/tests",
+  "/contracts",
+  "/docs",
+  "/scripts",
   "/.github",
+  "/compatibility.json",
+  "/CHANGELOG.md",
+  "/CONTRIBUTING.md",
   "/LICENSE",
   "/NOTICE",
   "/README.md",
+  "/RELEASING.md",
+  "/SECURITY.md",
   "/pyproject.toml",
 ]
 
 [tool.pytest.ini_options]
 addopts = "-ra --strict-markers --strict-config"
 testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+  "conformance: language-neutral contract conformance",
+  "integration: Core and lifecycle integration",
+  "packaging: built artifact verification",
+  "property: generative deterministic contract tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["meridian_storage.semantics"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+skip_covered = true
 
 [tool.ruff]
 target-version = "py312"
@@ -63,3 +113,15 @@ line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["meridian_storage.semantics"]
+mypy_path = "src"
+namespace_packages = true
+explicit_package_bases = true

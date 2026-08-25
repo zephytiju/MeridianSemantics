@@ -1,0 +1,23 @@
+{
+  "$comment": "SPDX-License-Identifier: Apache-2.0",
+  "catalogContracts": {
+    "cache": "1.0.0",
+    "structured": "1.0.0"
+  },
+  "core": {
+    "distribution": "meridian-storage-core",
+    "version": "1.0.0",
+    "publicContractCommit": "ed533571f502bf530689ad9839f5e2608fee6514",
+    "sdistSha256": "2c44d44569a380f44ea7f797e7fe623d0242fa79b6bc34606d6bad1bc53f2d5a",
+    "wheelSha256": "6b8ebb70ee1a8467a96d668878a8eebf826c1c4b63b3832ae70f2c630a8ef4a1"
+  },
+  "design": {
+    "catalogsRevision": 70,
+    "hldRevision": 56
+  },
+  "distribution": "meridian-storage-semantics",
+  "formatVersion": "meridian-semantics-compatibility.v1",
+  "python": ">=3.12",
+  "schemaFormat": "meridian.schema.v1",
+  "version": "1.0.0"
+}

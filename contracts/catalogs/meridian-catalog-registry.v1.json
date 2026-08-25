@@ -1,0 +1,12 @@
+{
+  "$comment": "SPDX-License-Identifier: Apache-2.0",
+  "catalogs": [
+    { "name": "structured", "status": "v1", "owner": "meridian-storage-semantics", "profiles": ["relational", "document", "key-value", "search", "geospatial", "time-series", "relation"] },
+    { "name": "object", "status": "v1", "owner": "meridian-storage-object-common", "profiles": ["object", "artifact", "media"] },
+    { "name": "cache", "status": "v1", "owner": "meridian-storage-semantics", "profiles": ["explicit", "transparent-cache"] },
+    { "name": "evidence", "status": "v1", "owner": "meridian-storage-evidence", "profiles": ["telemetry", "audit", "lineage", "provenance"] },
+    { "name": "streaming", "status": "accepted-pending", "owner": "meridian-storage-streaming", "profiles": ["stream", "subscription", "consumer-group"] }
+  ],
+  "formatVersion": "meridian-catalog-registry.v1",
+  "notCatalogs": ["artifact", "audit", "geospatial", "lineage", "media", "ontology", "projection", "provenance", "query", "relation", "search", "telemetry", "time-series"]
+}

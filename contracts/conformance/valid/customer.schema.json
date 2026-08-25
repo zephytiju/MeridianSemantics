@@ -1,0 +1,43 @@
+{
+  "auditPolicy": {},
+  "cachePolicy": {},
+  "compatibility": {},
+  "consistency": "strong",
+  "constraints": [],
+  "extensions": {},
+  "fields": [
+    {
+      "annotations": {},
+      "cardinality": "one",
+      "constraints": {},
+      "defaultExpression": null,
+      "documentation": null,
+      "logicalType": "string",
+      "mutable": true,
+      "name": "id",
+      "nullable": false,
+      "sensitivityLabels": []
+    },
+    {
+      "annotations": {},
+      "cardinality": "one",
+      "constraints": {},
+      "defaultExpression": null,
+      "documentation": null,
+      "logicalType": "string",
+      "mutable": true,
+      "name": "name",
+      "nullable": true,
+      "sensitivityLabels": []
+    }
+  ],
+  "fingerprint": "sha256:cea4ac5073554ee5f76d878b6a8e0e29698e412c03971c5af2e2600e5462a66b",
+  "formatVersion": "meridian.schema.v1",
+  "id": "structured:example.customer",
+  "identity": ["id"],
+  "indexes": [],
+  "lineagePolicy": {},
+  "retentionLabel": "default",
+  "semanticKind": "relational",
+  "version": "1.0.0"
+}
