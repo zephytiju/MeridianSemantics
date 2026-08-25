@@ -1,0 +1,13 @@
+.coverage
+.hypothesis/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.venv/
+.artifacts/
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.py[cod]
+
