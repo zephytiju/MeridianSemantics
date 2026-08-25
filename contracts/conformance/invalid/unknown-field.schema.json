@@ -1,0 +1,15 @@
+{
+  "expectedRequirement": "schema.canonical",
+  "publication": {
+    "catalog": "structured",
+    "namespace": "example",
+    "name": "invalid",
+    "version": "1.0.0"
+  },
+  "definition": {
+    "semanticKind": "relational",
+    "fields": [{"name": "id", "logicalType": "string"}],
+    "identity": ["id"],
+    "nativeEngineOption": true
+  }
+}

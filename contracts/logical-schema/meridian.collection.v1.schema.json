@@ -1,0 +1,46 @@
+{
+  "$comment": "SPDX-License-Identifier: Apache-2.0",
+  "$id": "https://github.com/zephytiju/meridian-storage-semantics/contracts/logical-schema/meridian.collection.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Meridian V1 Collection Resource",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "id",
+    "activeSchemaRef",
+    "semanticProfile",
+    "state",
+    "labels",
+    "auditPolicyOverride",
+    "lineagePolicyOverride",
+    "cachePolicyOverride",
+    "extensions"
+  ],
+  "properties": {
+    "formatVersion": { "const": "meridian.collection.v1" },
+    "id": { "$ref": "#/$defs/resourceId" },
+    "activeSchemaRef": { "$ref": "#/$defs/schemaRef" },
+    "semanticProfile": { "enum": ["relational", "document", "key-value", "search", "geospatial", "time-series", "relation"] },
+    "state": { "enum": ["PROVISIONING", "ACTIVE", "PROVISIONING_FAILED", "MIGRATING", "DEPRECATED"] },
+    "labels": { "type": "object", "additionalProperties": { "type": "string" } },
+    "auditPolicyOverride": { "type": "object" },
+    "lineagePolicyOverride": { "type": "object" },
+    "cachePolicyOverride": { "type": "object" },
+    "extensions": { "type": "object" }
+  },
+  "$defs": {
+    "resourceId": { "type": "string", "pattern": "^structured:[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?\\.[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" },
+    "schemaRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalog", "namespace", "name", "version"],
+      "properties": {
+        "catalog": { "const": "structured" },
+        "namespace": { "type": "string", "pattern": "^[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" },
+        "name": { "type": "string", "pattern": "^[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" },
+        "version": { "type": "string", "minLength": 5 }
+      }
+    }
+  }
+}

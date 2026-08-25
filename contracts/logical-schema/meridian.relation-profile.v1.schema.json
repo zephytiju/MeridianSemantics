@@ -1,0 +1,29 @@
+{
+  "$comment": "SPDX-License-Identifier: Apache-2.0",
+  "$id": "https://github.com/zephytiju/meridian-storage-semantics/contracts/logical-schema/meridian.relation-profile.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Meridian V1 Relation profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kind", "sourceField", "targetField", "directed", "sourceCollections", "targetCollections"],
+  "properties": {
+    "kind": { "const": "relation" },
+    "sourceField": { "type": "string", "minLength": 1 },
+    "targetField": { "type": "string", "minLength": 1 },
+    "directed": { "type": "boolean" },
+    "sourceCollections": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } },
+    "targetCollections": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/ref" } }
+  },
+  "$defs": {
+    "ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalog", "namespace", "name"],
+      "properties": {
+        "catalog": { "const": "structured" },
+        "namespace": { "type": "string", "pattern": "^[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" },
+        "name": { "type": "string", "pattern": "^[A-Za-z](?:[A-Za-z0-9_.-]{0,253}[A-Za-z0-9])?$" }
+      }
+    }
+  }
+}
