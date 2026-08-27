@@ -39,9 +39,9 @@ test = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/zephytiju/meridian-storage-semantics#readme"
-Issues = "https://github.com/zephytiju/meridian-storage-semantics/issues"
-Repository = "https://github.com/zephytiju/meridian-storage-semantics"
+Documentation = "https://github.com/zephytiju/MeridianSemantics#readme"
+Issues = "https://github.com/zephytiju/MeridianSemantics/issues"
+Repository = "https://github.com/zephytiju/MeridianSemantics"
 
 [project.entry-points."meridian_storage.catalogs"]
 cache = "meridian_storage.semantics.catalogs:CacheCatalogProvider"

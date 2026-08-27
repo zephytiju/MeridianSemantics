@@ -1,6 +1,6 @@
 {
   "$comment": "SPDX-License-Identifier: Apache-2.0",
-  "$id": "https://github.com/zephytiju/meridian-storage-semantics/contracts/logical-schema/meridian.collection.v1.schema.json",
+  "$id": "https://github.com/zephytiju/MeridianSemantics/contracts/logical-schema/meridian.collection.v1.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Meridian V1 Collection Resource",
   "type": "object",
