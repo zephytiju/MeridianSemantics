@@ -9,14 +9,14 @@ publication, compatibility classification, multilingual ICU metadata, and Core
 mapping-first Catalog surfaces.
 
 The distribution contains one Python package, `meridian_storage.semantics`, and
-depends on the released `meridian-storage-core==1.0.0` contract. The shared
+depends on the released `meridian-storage-core==1.0.1` contract. The shared
 `meridian_storage` import root is packaging infrastructure; this repository does
 not contain Core source or any other Meridian package.
 
 ## Install
 
 ```console
-python -m pip install meridian-storage-semantics==1.0.0
+python -m pip install meridian-storage-semantics==2.0.0
 ```
 
 Python 3.12 or newer is required.
@@ -67,6 +67,18 @@ Consumers create serializable Core `Expression` values. Planning normalizes them
 to portable `Operation` values. Engine selection, credentials, provisioning,
 physical DDL, ACLs, migration execution, and lifecycle remain Adapter/Platform
 responsibilities and are not accepted by these APIs.
+
+## Structured writes
+
+`structured.put(resource=..., data=..., mode="if_absent", expected_version=None)`
+creates only when absent by default. Use explicit `update` for existing records
+or `upsert` for deliberate create-or-update. Non-null expected versions are
+invalid with `if_absent`; update/upsert accept optional version checks and zero
+never means create. Serialized put arguments require mode.
+
+This breaking release requires Core 1.0.1 and an adapter supporting the 2.0.0 put
+contract. Read [the migration guide](docs/structured-put-migration.md) before
+upgrading callers or persisted Expressions.
 
 ## Catalog registry
 

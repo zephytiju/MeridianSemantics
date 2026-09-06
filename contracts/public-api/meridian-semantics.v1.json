@@ -1,10 +1,29 @@
 {
   "$comment": "SPDX-License-Identifier: Apache-2.0",
   "catalogs": {
-    "cache": ["compare_and_set", "create_resource", "delete", "get", "invalidate", "put", "put_if_absent"],
-    "structured": ["aggregate", "create_resource", "delete", "get", "patch", "publish_schema", "put", "query", "search", "traverse"]
+    "cache": [
+      "compare_and_set",
+      "create_resource",
+      "delete",
+      "get",
+      "invalidate",
+      "put",
+      "put_if_absent"
+    ],
+    "structured": [
+      "aggregate",
+      "create_resource",
+      "delete",
+      "get",
+      "patch",
+      "publish_schema",
+      "put",
+      "query",
+      "search",
+      "traverse"
+    ]
   },
-  "core": "1.0.0",
+  "core": "1.0.1",
   "distribution": "meridian-storage-semantics",
   "entryPoints": {
     "catalogs": {
@@ -119,5 +138,8 @@
   "formatVersion": "meridian-semantics-public-api.v1",
   "python": ">=3.12",
   "schemaFormat": "meridian.schema.v1",
-  "version": "1.0.0"
+  "version": "2.0.0",
+  "operationVersions": {
+    "meridian.structured.put": "2.0.0"
+  }
 }

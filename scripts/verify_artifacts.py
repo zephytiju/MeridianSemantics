@@ -13,7 +13,7 @@ from email.parser import Parser
 from pathlib import Path, PurePosixPath
 
 PACKAGE = "meridian_storage/semantics"
-VERSION = "1.0.0"
+VERSION = "2.0.0"
 
 
 def digest(path: Path) -> str:
@@ -39,6 +39,8 @@ def verify_wheel(path: Path) -> dict[str, object]:
             f"{PACKAGE}/__init__.py",
             f"{PACKAGE}/py.typed",
             f"{PACKAGE}/compatibility.json",
+            f"{PACKAGE}/contracts/operations/meridian.structured.put.v2.schema.json",
+            f"{PACKAGE}/contracts/conformance/structured-put.v2.json",
             f"{PACKAGE}/contracts/catalogs/meridian-catalog-registry.v1.json",
             f"{PACKAGE}/contracts/logical-schema/meridian.schema.v1.schema.json",
             f"{PACKAGE}/contracts/public-api/meridian-semantics.v1.json",
@@ -59,7 +61,7 @@ def verify_wheel(path: Path) -> dict[str, object]:
         assert metadata["Version"] == VERSION
         assert metadata["Requires-Python"] == ">=3.12"
         assert metadata["License-Expression"] == "Apache-2.0"
-        assert "meridian-storage-core==1.0.0" in metadata.get_all("Requires-Dist", [])
+        assert "meridian-storage-core==1.0.1" in metadata.get_all("Requires-Dist", [])
         license_files = [name for name in names if ".dist-info/licenses/" in name]
         assert any(name.endswith("/LICENSE") for name in license_files)
         assert any(name.endswith("/NOTICE") for name in license_files)

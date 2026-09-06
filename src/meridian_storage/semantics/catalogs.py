@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Core 1.0.0 Catalog providers for structured and cache Expression surfaces."""
+"""Core 1.0.1 Catalog providers for structured and cache Expression surfaces."""
 
 from __future__ import annotations
 
@@ -80,12 +80,16 @@ def _manifest(
         catalog_name=catalog,
         package_name="meridian-storage-semantics",
         package_version=__version__,
-        catalog_contract_version=SEMANTICS_CONTRACT_VERSION,
+        catalog_contract_version=(
+            "2.0.0" if catalog == "structured" else SEMANTICS_CONTRACT_VERSION
+        ),
         operations=tuple(
             OperationContract(
                 method=method,
                 operation_contract=f"meridian.{catalog}.{method}",
-                operation_version="1.0.0",
+                operation_version=(
+                    "2.0.0" if (catalog, method) == ("structured", "put") else "1.0.0"
+                ),
                 read_only=read_only,
                 idempotency=idempotency,
             )
@@ -93,7 +97,7 @@ def _manifest(
         ),
         extensions={
             "design.hldRevision": 56,
-            "design.catalogRevision": 70,
+            "design.catalogRevision": 124,
             "schemaFormat": "meridian.schema.v1",
         },
     )
@@ -146,11 +150,13 @@ class StructuredCatalogSurface:
         *,
         resource: str | Mapping[str, object],
         data: Mapping[str, object],
+        mode: str = "if_absent",
         expected_version: str | int | None = None,
     ) -> Expression:
-        arguments: dict[str, Any] = {"resource": resource, "data": dict(data)}
+        arguments: dict[str, Any] = {"resource": resource, "data": dict(data), "mode": mode}
         if expected_version is not None:
             arguments["expectedVersion"] = expected_version
+        _validate_data_arguments("structured", "put", arguments)
         return self._expression("put", arguments)
 
     def get(
@@ -457,6 +463,10 @@ def _normalize(
     else:
         resources = (_parse_resource(input_value.get("resource"), manifest.catalog_name),)
         _validate_data_arguments(manifest.catalog_name, expression.method, input_value)
+        if (manifest.catalog_name, expression.method) == ("structured", "put") and input_value.get(
+            "expectedVersion"
+        ) is None:
+            input_value.pop("expectedVersion", None)
     if contract.idempotency == "always":
         idempotent = True
     elif contract.idempotency == "never":
@@ -602,7 +612,7 @@ def _validate_data_arguments(
     value: Mapping[str, object],
 ) -> None:
     shapes: Mapping[tuple[str, str], tuple[set[str], set[str]]] = {
-        ("structured", "put"): ({"resource", "data"}, {"expectedVersion"}),
+        ("structured", "put"): ({"resource", "data", "mode"}, {"expectedVersion"}),
         ("structured", "get"): ({"resource", "where"}, set()),
         ("structured", "patch"): (
             {"resource", "where", "changes"},
@@ -668,6 +678,18 @@ def _validate_data_arguments(
             raise InvalidDefinition(
                 f"{catalog}.{method} {key} must be an array of objects",
                 requirement="expression.arguments",
+            )
+    if (catalog, method) == ("structured", "put"):
+        mode = value["mode"]
+        if not isinstance(mode, str) or mode not in {"if_absent", "update", "upsert"}:
+            raise InvalidDefinition(
+                "structured.put mode must be if_absent, update, or upsert",
+                requirement="expression.arguments",
+            )
+        if mode == "if_absent" and value.get("expectedVersion") is not None:
+            raise InvalidDefinition(
+                "expectedVersion is invalid with structured.put mode if_absent",
+                requirement="operation.precondition",
             )
     expected = value.get("expectedVersion")
     if expected is not None and (

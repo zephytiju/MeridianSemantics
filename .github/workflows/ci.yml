@@ -74,12 +74,12 @@ jobs:
         run: python scripts/verify_artifacts.py .artifacts/first/*
       - name: Generate SPDX SBOM
         run: |
-          python scripts/generate_sbom.py --output ".artifacts/meridian-storage-semantics-1.0.0.spdx.json" .artifacts/first/*
+          python scripts/generate_sbom.py --output ".artifacts/meridian-storage-semantics-2.0.0.spdx.json" .artifacts/first/*
       - name: Clean-install wheel with released Core
         run: |
           python -m venv .artifacts/venv
           WHEEL_PATH=$(find .artifacts/first -name '*.whl' -type f -print -quit)
-          .artifacts/venv/bin/python -m pip install --disable-pip-version-check meridian-storage-core==1.0.0 "$WHEEL_PATH"
+          .artifacts/venv/bin/python -m pip install --disable-pip-version-check meridian-storage-core==1.0.1 "$WHEEL_PATH"
           cd /tmp
           "$GITHUB_WORKSPACE/.artifacts/venv/bin/python" -I -c 'from meridian_storage import Meridian; from meridian_storage.semantics import SemanticsSchemaProvider, catalog_registry; assert Meridian and SemanticsSchemaProvider().load() and tuple(catalog_registry()) == ("structured", "object", "cache", "evidence", "streaming")'
       - name: Upload verified artifacts
