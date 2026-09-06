@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/zephytiju/MeridianSemantics/contracts/operations/meridian.structured.put.v2.schema.json",
+  "$comment": "SPDX-License-Identifier: Apache-2.0",
+  "title": "Arguments and normalized input for meridian.structured.put 2.0.0",
+  "description": "The public method supplies if_absent. Wire input must include mode. Resource resolution and Schema validation still apply.",
+  "type": "object",
+  "required": ["resource", "data", "mode"],
+  "additionalProperties": false,
+  "properties": {
+    "resource": {"oneOf": [{"type": "string"}, {"type": "object"}]},
+    "data": {"type": "object"},
+    "mode": {"enum": ["if_absent", "update", "upsert"]},
+    "expectedVersion": {"type": ["string", "integer", "null"]}
+  },
+  "allOf": [{
+    "if": {"properties": {"mode": {"const": "if_absent"}}},
+    "then": {"properties": {"expectedVersion": {"type": "null"}}}
+  }]
+}

@@ -25,7 +25,7 @@ def test_manifests_and_installed_entry_points() -> None:
     cache = cache_manifest()
     assert structured.catalog_name == "structured"
     assert cache.catalog_name == "cache"
-    assert structured.package_version == "1.0.0"
+    assert structured.package_version == "2.0.0"
     assert structured.operation_for("query").read_only
     entry_points = importlib.metadata.entry_points()
     catalogs = {item.name: item for item in entry_points.select(group="meridian_storage.catalogs")}

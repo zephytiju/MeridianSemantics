@@ -417,7 +417,7 @@ def test_catalog_normalization_edge_branches() -> None:
     assert cache.manifest().catalog_name == "cache"
     surface = structured.create_surface()
     assert structured.normalize(
-        surface.put(resource="example.x", data={}, expected_version=0)
+        surface.put(resource="example.x", data={}, mode="update", expected_version=0)
     ).idempotent
     assert structured.normalize(
         surface.delete(resource="example.x", where={}, expected_version=0)

@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "meridian-storage-semantics"
-version = "1.0.0"
+version = "2.0.0"
 description = "Meridian V1 logical schema, resource, data, and metadata semantics"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -24,7 +24,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
   "Typing :: Typed",
 ]
-dependencies = ["meridian-storage-core==1.0.0"]
+dependencies = ["meridian-storage-core==1.0.1"]
 
 [project.optional-dependencies]
 test = [

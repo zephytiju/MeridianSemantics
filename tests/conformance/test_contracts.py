@@ -134,7 +134,7 @@ def test_catalog_and_public_api_ledgers_are_exact() -> None:
     ]
     public = _json(CONTRACTS / "public-api" / "meridian-semantics.v1.json")
     assert public["version"] == semantics.__version__
-    assert public["core"] == "1.0.0"
+    assert public["core"] == "1.0.1"
     assert public["exports"] == sorted(semantics.__all__)
     assert set(public["catalogs"]) == {"structured", "cache"}  # type: ignore[arg-type]
 
@@ -144,10 +144,10 @@ def test_compatibility_ledger_and_packaged_contract_data() -> None:
     ledger = _json(ROOT / "compatibility.json")
     assert ledger["core"] == {
         "distribution": "meridian-storage-core",
-        "version": "1.0.0",
-        "publicContractCommit": "ed533571f502bf530689ad9839f5e2608fee6514",
-        "sdistSha256": "2c44d44569a380f44ea7f797e7fe623d0242fa79b6bc34606d6bad1bc53f2d5a",
-        "wheelSha256": "6b8ebb70ee1a8467a96d668878a8eebf826c1c4b63b3832ae70f2c630a8ef4a1",
+        "version": "1.0.1",
+        "publicContractCommit": "ed9f1c140130cd235b9e64fe117cad8b9c40f30a",
+        "sdistSha256": "9244a6fac589f402a82037f08e2d57a5ae4f9747c7c825b46cedf8c6d67f2b80",
+        "wheelSha256": "5c873da941b7b5e14ca0d852d723f919e88a28bbf6cc48ae0ef985b64cac9a97",
     }
     package_root = resources.files("meridian_storage.semantics")
     assert package_root.joinpath("compatibility.json").is_file()

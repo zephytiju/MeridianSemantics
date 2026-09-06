@@ -2,22 +2,25 @@
   "$comment": "SPDX-License-Identifier: Apache-2.0",
   "catalogContracts": {
     "cache": "1.0.0",
-    "structured": "1.0.0"
+    "structured": "2.0.0"
   },
   "core": {
     "distribution": "meridian-storage-core",
-    "version": "1.0.0",
-    "publicContractCommit": "ed533571f502bf530689ad9839f5e2608fee6514",
-    "sdistSha256": "2c44d44569a380f44ea7f797e7fe623d0242fa79b6bc34606d6bad1bc53f2d5a",
-    "wheelSha256": "6b8ebb70ee1a8467a96d668878a8eebf826c1c4b63b3832ae70f2c630a8ef4a1"
+    "version": "1.0.1",
+    "publicContractCommit": "ed9f1c140130cd235b9e64fe117cad8b9c40f30a",
+    "sdistSha256": "9244a6fac589f402a82037f08e2d57a5ae4f9747c7c825b46cedf8c6d67f2b80",
+    "wheelSha256": "5c873da941b7b5e14ca0d852d723f919e88a28bbf6cc48ae0ef985b64cac9a97"
   },
   "design": {
-    "catalogsRevision": 70,
+    "catalogsRevision": 124,
     "hldRevision": 56
   },
   "distribution": "meridian-storage-semantics",
   "formatVersion": "meridian-semantics-compatibility.v1",
   "python": ">=3.12",
   "schemaFormat": "meridian.schema.v1",
-  "version": "1.0.0"
+  "version": "2.0.0",
+  "operationContracts": {
+    "meridian.structured.put": "2.0.0"
+  }
 }

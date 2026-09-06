@@ -11,6 +11,7 @@ from pathlib import Path
 import jsonschema
 
 import meridian_storage.semantics as semantics
+from meridian_storage import Expression
 from meridian_storage.semantics import (
     ActivationFailed,
     CapabilityMismatch,
@@ -26,6 +27,7 @@ from meridian_storage.semantics import (
     SchemaAPI,
     SchemaDocument,
     SchemaVersionConflict,
+    StructuredCatalogProvider,
     UnsupportedSemantic,
     cache_manifest,
     catalog_registry,
@@ -42,10 +44,10 @@ def load(path: Path) -> dict[str, object]:
 def main() -> None:
     public = load(ROOT / "contracts/public-api/meridian-semantics.v1.json")
     assert public["version"] == semantics.__version__
-    assert public["core"] == "1.0.0"
+    assert public["core"] == "1.0.1"
     assert public["exports"] == sorted(semantics.__all__)
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
-    assert project["dependencies"] == ["meridian-storage-core==1.0.0"]
+    assert project["dependencies"] == ["meridian-storage-core==1.0.1"]
 
     manifests = {"structured": structured_manifest(), "cache": cache_manifest()}
     public_catalogs = public["catalogs"]
@@ -54,6 +56,20 @@ def main() -> None:
         assert (
             sorted(contract.method for contract in manifest.operations) == public_catalogs[catalog]
         )
+
+    assert public["operationVersions"] == {"meridian.structured.put": "2.0.0"}
+    assert manifests["structured"].catalog_contract_version == "2.0.0"
+    assert manifests["structured"].operation_for("put").operation_version == "2.0.0"
+    put_schema = load(ROOT / "contracts/operations/meridian.structured.put.v2.schema.json")
+    jsonschema.Draft202012Validator.check_schema(put_schema)
+    put_fixtures = load(ROOT / "contracts/conformance/structured-put.v2.json")
+    provider = StructuredCatalogProvider()
+    for fixture in put_fixtures["valid"]:  # type: ignore[union-attr]
+        expression = Expression.from_mapping(fixture["expression"])
+        jsonschema.validate(expression.to_dict()["arguments"], put_schema)
+        operation = provider.normalize(expression)
+        assert operation.to_dict() == fixture["operation"]
+        assert operation.request_fingerprint == fixture["requestFingerprint"]
 
     registry_contract = load(ROOT / "contracts/catalogs/meridian-catalog-registry.v1.json")
     registry = catalog_registry()
