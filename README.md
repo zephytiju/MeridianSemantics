@@ -16,7 +16,7 @@ not contain Core source or any other Meridian package.
 ## Install
 
 ```console
-python -m pip install meridian-storage-semantics==2.0.1
+python -m pip install meridian-storage-semantics==2.1.0
 ```
 
 Python 3.12 or newer is required.

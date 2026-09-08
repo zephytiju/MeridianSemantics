@@ -12,7 +12,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 NAME = "meridian-storage-semantics"
-VERSION = "2.0.1"
+VERSION = "2.1.0"
 
 
 def sha256(path: Path) -> str:

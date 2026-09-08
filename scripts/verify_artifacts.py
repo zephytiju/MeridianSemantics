@@ -13,7 +13,7 @@ from email.parser import Parser
 from pathlib import Path, PurePosixPath
 
 PACKAGE = "meridian_storage/semantics"
-VERSION = "2.0.1"
+VERSION = "2.1.0"
 
 
 def digest(path: Path) -> str:

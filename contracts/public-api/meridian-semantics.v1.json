@@ -69,6 +69,7 @@
     "LocalizedText",
     "LogicalKind",
     "LogicalType",
+    "MetadataRepository",
     "ObjectMetadata",
     "ObjectProfile",
     "ObjectReference",
@@ -94,6 +95,7 @@
     "SchemaChange",
     "SchemaDocument",
     "SchemaReference",
+    "SchemaRepository",
     "SchemaStatus",
     "SchemaVersionConflict",
     "SemanticKind",
@@ -138,7 +140,7 @@
   "formatVersion": "meridian-semantics-public-api.v1",
   "python": ">=3.12",
   "schemaFormat": "meridian.schema.v1",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "operationVersions": {
     "meridian.structured.put": "2.0.0"
   }

@@ -29,6 +29,37 @@ idempotent. A conflicting fingerprint, non-monotonic version, stale revision, or
 unapproved breaking change produces a stable typed error. `update` always creates
 a new immutable version; it never edits a published document.
 
+### Injectable repository boundary (2.1.0)
+
+`SchemaRepository` is the public structural protocol for immutable Schema
+publication/read, listing, deprecation and consistent registry snapshots.
+`MetadataRepository` extends it with Collection activation-state operations for
+`ResourceAPI`. Both are runtime-checkable; a persistent implementation need not
+inherit from `InMemoryMetadataRepository`. `SchemaAPI(repository)` and
+`SemanticsSchemaProvider(repository)` consume the schema-only protocol.
+Deployment composition supplies the store and owns its connection lifetime,
+scope and migration. No provider is selected by business code and no in-memory
+production fallback exists. `InMemoryMetadataRepository` remains an explicit
+reference implementation for tests and local tools.
+
+Persistent implementations must atomically preserve the full canonical
+`SchemaDocument` and fingerprint with revision CAS, immutable replay, monotonic
+versioning and the existing compatibility policy. Restart and concurrent callers
+must observe committed publications. A missing store migration fails closed;
+publication and startup do not create tables or activate physical Resources.
+`SchemaAPI.read(..., version="1.0.0", expected_fingerprint=pin)` validates an
+exact pin and raises `IncompatibleSchema` with requirement `schema.fingerprint`
+on mismatch. Supplying a fingerprint with a latest-version read is invalid.
+
+A provider bundle fingerprint hashes the complete Core `ResourceBundle`. It is
+separate from each `ResourceDefinition.fingerprint` and from the complete
+`SchemaDocument.fingerprint`; deployment validation compares each to its own pin.
+
+Upgrade by installing the compatible Semantics release before its persistent
+provider release, running the provider's explicit storage migration, and
+injecting that provider. Roll back a complete tested release set while retaining
+stored immutable Schemas. This release introduces no storage migration itself.
+
 ## Resource and data documents
 
 - `CollectionDocument` binds one structured logical Resource to an exact active

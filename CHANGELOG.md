@@ -2,6 +2,16 @@
 
 # Changelog
 
+## 2.1.0 — 2026-09-08
+
+- Add public structural `SchemaRepository` and `MetadataRepository` protocols.
+  `SchemaAPI`, `ResourceAPI` and `SemanticsSchemaProvider` accept injected stores
+  without depending on the in-memory reference implementation.
+- Add exact-version `SchemaAPI.read(expected_fingerprint=...)` validation.
+- Preserve canonical Schema bytes, Catalog and Operation contracts, compatibility
+  bounds and existing explicit in-memory usage. Persistent storage remains
+  deployment supplied; no repository is selected implicitly and no DDL is added.
+
 ## 2.0.1 — 2026-09-08
 
 - Express the consumed Core API as >=1.0.1,<2 instead of an exact historical recipe.
