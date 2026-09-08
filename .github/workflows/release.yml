@@ -62,7 +62,7 @@ jobs:
           python scripts/verify_artifacts.py .artifacts/first/*
           mkdir release
           cp .artifacts/first/* release/
-          python scripts/generate_sbom.py --output "release/meridian-storage-semantics-2.0.1.spdx.json" .artifacts/first/*
+          python scripts/generate_sbom.py --output "release/meridian-storage-semantics-2.1.0.spdx.json" .artifacts/first/*
       - name: Clean-install release wheel with locked public Core
         run: |
           python -m venv .artifacts/venv

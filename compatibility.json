@@ -20,7 +20,7 @@
   "formatVersion": "meridian-semantics-compatibility.v1",
   "python": ">=3.12",
   "schemaFormat": "meridian.schema.v1",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "operationContracts": {
     "meridian.structured.put": "2.0.0"
   },

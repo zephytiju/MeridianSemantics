@@ -81,7 +81,7 @@ jobs:
         run: python scripts/verify_artifacts.py .artifacts/first/*
       - name: Generate SPDX SBOM
         run: |
-          python scripts/generate_sbom.py --output ".artifacts/meridian-storage-semantics-2.0.1.spdx.json" .artifacts/first/*
+          python scripts/generate_sbom.py --output ".artifacts/meridian-storage-semantics-2.1.0.spdx.json" .artifacts/first/*
       - name: Clean-install wheel with released Core
         run: |
           python -m venv .artifacts/venv

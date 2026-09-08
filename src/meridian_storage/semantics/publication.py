@@ -8,7 +8,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from enum import StrEnum
-from typing import cast
+from typing import Protocol, cast, runtime_checkable
 
 from meridian_storage.registry import (
     NamespaceDefinition as CoreNamespaceDefinition,
@@ -120,6 +120,58 @@ class TraversalResolution:
             "registryFingerprint": self.registry_fingerprint,
             "maxDepth": self.max_depth,
         }
+
+
+@runtime_checkable
+class SchemaRepository(Protocol):
+    """Injectable immutable Schema metadata store; publication never applies DDL.
+
+    Implementations atomically persist canonical documents, fingerprints and a
+    revision; identical replay preserves the publication and revision. Changed
+    same-version content, stale revision pins and invalid evolution fail closed.
+    A snapshot is a consistent read of one revision. Deployment owns storage
+    installation, lifetime and scope. No implicit in-memory fallback is allowed.
+    """
+
+    @property
+    def revision(self) -> int: ...
+
+    def publish_schema(
+        self,
+        document: SchemaDocument,
+        *,
+        expected_revision: int | None = None,
+        allow_breaking: bool = False,
+    ) -> PublishResult: ...
+
+    def get_schema(
+        self, reference: SchemaReference, *, include_deprecated: bool = False
+    ) -> PublishedSchema: ...
+
+    def list_schema_versions(
+        self, reference: SchemaReference, *, include_deprecated: bool = True
+    ) -> tuple[PublishedSchema, ...]: ...
+
+    def deprecate_schema(
+        self, reference: SchemaReference, *, expected_revision: int | None = None
+    ) -> PublishedSchema: ...
+
+    def snapshot(self) -> RegistrySnapshot: ...
+
+
+@runtime_checkable
+class MetadataRepository(SchemaRepository, Protocol):
+    """Schema repository with the separate physical Resource activation state."""
+
+    def create_collection(
+        self, document: CollectionDocument, *, expected_revision: int | None = None
+    ) -> CollectionDocument: ...
+
+    def get_collection(self, reference: ResourceReference) -> CollectionDocument: ...
+
+    def replace_collection(
+        self, document: CollectionDocument, *, expected_revision: int | None = None
+    ) -> CollectionDocument: ...
 
 
 class InMemoryMetadataRepository:
@@ -354,7 +406,7 @@ class InMemoryMetadataRepository:
 class SchemaAPI:
     """Mapping-first dynamic create/read/update/version API."""
 
-    def __init__(self, repository: InMemoryMetadataRepository) -> None:
+    def __init__(self, repository: SchemaRepository) -> None:
         self._repository = repository
 
     @property
@@ -405,11 +457,22 @@ class SchemaAPI:
         name: str,
         version: str | None = None,
         include_deprecated: bool = False,
+        expected_fingerprint: str | None = None,
     ) -> PublishedSchema:
-        return self._repository.get_schema(
+        if expected_fingerprint is not None and version is None:
+            raise ValueError("a fingerprint-pinned Schema read requires an exact version")
+        publication = self._repository.get_schema(
             SchemaReference(CatalogName(catalog), namespace, name, version),
             include_deprecated=include_deprecated,
         )
+        if expected_fingerprint is not None and publication.fingerprint != expected_fingerprint:
+            raise IncompatibleSchema(
+                "stored Schema fingerprint differs from the exact read pin",
+                requirement="schema.fingerprint",
+                logical_references=(publication.ref.canonical,),
+                resource_ref=publication.ref.schema_id,
+            )
+        return publication
 
     get = read
 
@@ -480,7 +543,7 @@ class SchemaAPI:
 
 
 class ResourceAPI:
-    def __init__(self, repository: InMemoryMetadataRepository) -> None:
+    def __init__(self, repository: MetadataRepository) -> None:
         self._repository = repository
 
     def create(
@@ -588,7 +651,7 @@ class SemanticsSchemaProvider:
     provider_id = "meridian.semantics"
     provider_contract_version = SEMANTICS_CONTRACT_VERSION
 
-    def __init__(self, repository: InMemoryMetadataRepository | None = None) -> None:
+    def __init__(self, repository: SchemaRepository | None = None) -> None:
         self._repository = repository
 
     def load(self) -> CoreResourceBundle:
@@ -697,11 +760,13 @@ __all__ = [
     "SEMANTICS_CONTRACT_VERSION",
     "STRUCTURED_REGISTRY_REF",
     "InMemoryMetadataRepository",
+    "MetadataRepository",
     "PublishResult",
     "PublishedSchema",
     "RegistrySnapshot",
     "ResourceAPI",
     "SchemaAPI",
+    "SchemaRepository",
     "SchemaStatus",
     "SemanticsSchemaProvider",
     "TraversalResolution",
