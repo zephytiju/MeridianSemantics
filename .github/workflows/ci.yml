@@ -17,12 +17,13 @@ concurrency:
 
 jobs:
   quality:
-    name: Python ${{ matrix.python-version }}
+    name: Python ${{ matrix.python-version }} / Core ${{ matrix.core-version }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         python-version: ["3.12", "3.13", "3.14"]
+        core-version: ["1.0.1", "1.1.0"]
     steps:
       - name: Check out source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -34,7 +35,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - name: Install package and test tools
-        run: python -m pip install --disable-pip-version-check '.[test]'
+        run: |
+          python -m pip install --disable-pip-version-check -r locks/core-${{ matrix.core-version }}.txt
+          python -m pip install --disable-pip-version-check '.[test]'
+          python -m pip check
       - name: Check formatting
         run: ruff format --check src tests scripts
       - name: Lint
@@ -61,7 +65,10 @@ jobs:
           python-version: "3.13"
           cache: pip
       - name: Install package and build tools
-        run: python -m pip install --disable-pip-version-check '.[test]'
+        run: |
+          python -m pip install --disable-pip-version-check -r locks/core-1.1.0.txt
+          python -m pip install --disable-pip-version-check '.[test]'
+          python -m pip check
       - name: Fix reproducible-build timestamp
         run: echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD)" >> "$GITHUB_ENV"
       - name: Build twice
@@ -74,12 +81,14 @@ jobs:
         run: python scripts/verify_artifacts.py .artifacts/first/*
       - name: Generate SPDX SBOM
         run: |
-          python scripts/generate_sbom.py --output ".artifacts/meridian-storage-semantics-2.0.0.spdx.json" .artifacts/first/*
+          python scripts/generate_sbom.py --output ".artifacts/meridian-storage-semantics-2.0.1.spdx.json" .artifacts/first/*
       - name: Clean-install wheel with released Core
         run: |
           python -m venv .artifacts/venv
           WHEEL_PATH=$(find .artifacts/first -name '*.whl' -type f -print -quit)
-          .artifacts/venv/bin/python -m pip install --disable-pip-version-check meridian-storage-core==1.0.1 "$WHEEL_PATH"
+          .artifacts/venv/bin/python -m pip install --disable-pip-version-check -r locks/core-1.1.0.txt
+          .artifacts/venv/bin/python -m pip install --disable-pip-version-check "$WHEEL_PATH"
+          .artifacts/venv/bin/python -m pip check
           cd /tmp
           "$GITHUB_WORKSPACE/.artifacts/venv/bin/python" -I -c 'from meridian_storage import Meridian; from meridian_storage.semantics import SemanticsSchemaProvider, catalog_registry; assert Meridian and SemanticsSchemaProvider().load() and tuple(catalog_registry()) == ("structured", "object", "cache", "evidence", "streaming")'
       - name: Upload verified artifacts

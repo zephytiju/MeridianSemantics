@@ -2,7 +2,8 @@
 
 # Migrate structured.put to explicit existence modes
 
-Semantics 2.0.0 requires released Core 1.0.1. Its structured Catalog contract and
+Semantics 2.0.0 was tested with released Core 1.0.1. Semantics 2.0.1 admits
+Core >=1.0.1,<2 and validates both 1.0.1 and 1.1.0. Its structured Catalog contract and
 `meridian.structured.put` Operation are 2.0.0; other Operations, the cache Catalog,
 Schema formats and the schema-provider contract remain 1.0.0. Install an adapter
 that advertises `meridian.structured.put` 2.0.0 before enabling these writes.

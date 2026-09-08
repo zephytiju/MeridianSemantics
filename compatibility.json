@@ -6,21 +6,39 @@
   },
   "core": {
     "distribution": "meridian-storage-core",
-    "version": "1.0.1",
-    "publicContractCommit": "ed9f1c140130cd235b9e64fe117cad8b9c40f30a",
-    "sdistSha256": "9244a6fac589f402a82037f08e2d57a5ae4f9747c7c825b46cedf8c6d67f2b80",
-    "wheelSha256": "5c873da941b7b5e14ca0d852d723f919e88a28bbf6cc48ae0ef985b64cac9a97"
+    "version": "1.1.0",
+    "publicContractCommit": "d30219cb39153a66f5adddd943a37c2fd24591b7",
+    "sdistSha256": "46f7b64b706112dad0b62f768bfaf8b05f22d73d87f77702a0b3f7fd61544ca7",
+    "wheelSha256": "fc7372a17993f43ec285e3d52c0e9c458ef8e6f5ce13bb2d1b01b064aa8eff49"
   },
   "design": {
-    "catalogsRevision": 124,
-    "hldRevision": 56
+    "catalogsRevision": 125,
+    "hldRevision": 56,
+    "deploymentDecouplingRevision": 112
   },
   "distribution": "meridian-storage-semantics",
   "formatVersion": "meridian-semantics-compatibility.v1",
   "python": ">=3.12",
   "schemaFormat": "meridian.schema.v1",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "operationContracts": {
     "meridian.structured.put": "2.0.0"
-  }
+  },
+  "coreRequirement": ">=1.0.1,<2",
+  "testedCoreReleases": [
+    {
+      "distribution": "meridian-storage-core",
+      "version": "1.0.1",
+      "publicContractCommit": "ed9f1c140130cd235b9e64fe117cad8b9c40f30a",
+      "sdistSha256": "9244a6fac589f402a82037f08e2d57a5ae4f9747c7c825b46cedf8c6d67f2b80",
+      "wheelSha256": "5c873da941b7b5e14ca0d852d723f919e88a28bbf6cc48ae0ef985b64cac9a97"
+    },
+    {
+      "distribution": "meridian-storage-core",
+      "version": "1.1.0",
+      "publicContractCommit": "d30219cb39153a66f5adddd943a37c2fd24591b7",
+      "sdistSha256": "46f7b64b706112dad0b62f768bfaf8b05f22d73d87f77702a0b3f7fd61544ca7",
+      "wheelSha256": "fc7372a17993f43ec285e3d52c0e9c458ef8e6f5ce13bb2d1b01b064aa8eff49"
+    }
+  ]
 }

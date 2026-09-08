@@ -9,14 +9,14 @@ publication, compatibility classification, multilingual ICU metadata, and Core
 mapping-first Catalog surfaces.
 
 The distribution contains one Python package, `meridian_storage.semantics`, and
-depends on the released `meridian-storage-core==1.0.1` contract. The shared
+depends on the public `meridian-storage-core>=1.0.1,<2` API. The shared
 `meridian_storage` import root is packaging infrastructure; this repository does
 not contain Core source or any other Meridian package.
 
 ## Install
 
 ```console
-python -m pip install meridian-storage-semantics==2.0.0
+python -m pip install meridian-storage-semantics==2.0.1
 ```
 
 Python 3.12 or newer is required.
@@ -76,7 +76,7 @@ or `upsert` for deliberate create-or-update. Non-null expected versions are
 invalid with `if_absent`; update/upsert accept optional version checks and zero
 never means create. Serialized put arguments require mode.
 
-This breaking release requires Core 1.0.1 and an adapter supporting the 2.0.0 put
+The structured put boundary requires Core >=1.0.1,<2 and an adapter supporting the 2.0.0 put
 contract. Read [the migration guide](docs/structured-put-migration.md) before
 upgrading callers or persisted Expressions.
 
@@ -126,3 +126,7 @@ Further detail is in [`docs/contracts.md`](docs/contracts.md) and
 
 Copyright 2026 Meridian contributors. Licensed under Apache License 2.0; see
 [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+
+Release 2.0.1 repairs dependency metadata without changing semantic contracts.
+See [dependency compatibility](docs/dependency-compatibility.md) for the API-bound
+rationale, exact public validation locks, and tested-combination limits.

@@ -23,7 +23,7 @@
       "traverse"
     ]
   },
-  "core": "1.0.1",
+  "core": ">=1.0.1,<2",
   "distribution": "meridian-storage-semantics",
   "entryPoints": {
     "catalogs": {
@@ -138,7 +138,7 @@
   "formatVersion": "meridian-semantics-public-api.v1",
   "python": ">=3.12",
   "schemaFormat": "meridian.schema.v1",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "operationVersions": {
     "meridian.structured.put": "2.0.0"
   }
