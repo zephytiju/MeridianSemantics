@@ -2,6 +2,15 @@
 
 # Changelog
 
+## 2.0.1 — 2026-09-08
+
+- Express the consumed Core API as >=1.0.1,<2 instead of an exact historical recipe.
+- Validate Core 1.0.1 and 1.1.0 across Python 3.12–3.14; retain exact public
+  dependency locks and hashes for release verification.
+- Preserve structured put/Catalog 2.0.0, cache/other Operations 1.0.0, immutable
+  Schema fingerprints, and the rejection of expected-version-zero creation.
+- Keep the tested release ledger separate from the dependency compatibility range.
+
 ## 2.0.0 — 2026-09-06
 
 - Change structured put's default from implicit upsert to explicit `if_absent`,

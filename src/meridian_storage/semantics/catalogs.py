@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Core 1.0.1 Catalog providers for structured and cache Expression surfaces."""
+"""Core Catalog providers for structured and cache Expression surfaces."""
 
 from __future__ import annotations
 

@@ -44,10 +44,10 @@ def load(path: Path) -> dict[str, object]:
 def main() -> None:
     public = load(ROOT / "contracts/public-api/meridian-semantics.v1.json")
     assert public["version"] == semantics.__version__
-    assert public["core"] == "1.0.1"
+    assert public["core"] == ">=1.0.1,<2"
     assert public["exports"] == sorted(semantics.__all__)
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
-    assert project["dependencies"] == ["meridian-storage-core==1.0.1"]
+    assert project["dependencies"] == ["meridian-storage-core>=1.0.1,<2"]
 
     manifests = {"structured": structured_manifest(), "cache": cache_manifest()}
     public_catalogs = public["catalogs"]

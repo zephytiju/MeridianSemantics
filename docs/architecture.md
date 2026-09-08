@@ -5,7 +5,7 @@
 This package owns the provider-neutral logical model, validation, compatibility
 classification, dynamic metadata API, structured/cache Catalog manifests and
 Expression normalization, and logical Object/cache metadata. It consumes only
-the public `meridian-storage-core==1.0.1` release.
+the public `meridian-storage-core>=1.0.1,<2` API.
 The 2.0.0 structured put delta follows Catalogs revision 124; see
 [the migration contract](structured-put-migration.md).
 
