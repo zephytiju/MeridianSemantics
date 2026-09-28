@@ -2,8 +2,11 @@
 
 # Core dependency compatibility
 
-Semantics 2.0.1 declares `meridian-storage-core>=1.0.1,<2`. The lower bound
-retains the Core release used by the structured put v2 public API. Semantics
+The manifest declares the internal dependency major-only,
+`meridian-storage-core>=1,<2` (the jumbo accepted range form; resolution takes
+the newest promoted build of major 1 from the Jumbo index). The proven public
+API bound remains >=1.0.1,<2 — the lower bound retains the Core release used by
+the structured put v2 public API and is ledgered below. Semantics
 consumes Core Expression/Operation and their serializers, ResourceRef/SchemaRef,
 Catalog provider manifests and discovery, registry definitions/bundles, and the
 public error hierarchy. These public APIs are exercised by the existing
@@ -23,7 +26,7 @@ zero, and update/upsert CAS still requires an existing matching version.
 
 | Surface | Classification | Behavior |
 | --- | --- | --- |
-| Package Requires-Dist and public API ledger `core` | Public API bound | >=1.0.1,<2; no exact historical recipe |
+| Package Requires-Dist `core` and public API ledger `core` | Public API bound | Requires-Dist declares the major only (>=1,<2); proven API bound >=1.0.1,<2; no exact historical recipe |
 | `compatibility.json` `core` and `testedCoreReleases` | Tested-release provenance | Exact selected Core version, commit and public artifact hashes; never runtime membership gates |
 | `locks/core-*.txt` | Release-validation integrity | Exact public dependency closure with SHA-256 verification |
 | Catalog, Operation, Schema and capability requirements | Semantic contracts | Unchanged; incompatible Operations still fail closed |

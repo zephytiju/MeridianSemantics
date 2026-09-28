@@ -61,7 +61,9 @@ def verify_wheel(path: Path) -> dict[str, object]:
         assert metadata["Version"] == VERSION
         assert metadata["Requires-Python"] == ">=3.12"
         assert metadata["License-Expression"] == "Apache-2.0"
-        assert "meridian-storage-core<2,>=1.0.1" in metadata.get_all("Requires-Dist", [])
+        # Major-only jumbo declaration (normalized by the packaging metadata):
+        # resolution takes the newest promoted index record of major 1.
+        assert "meridian-storage-core<2,>=1" in metadata.get_all("Requires-Dist", [])
         license_files = [name for name in names if ".dist-info/licenses/" in name]
         assert any(name.endswith("/LICENSE") for name in license_files)
         assert any(name.endswith("/NOTICE") for name in license_files)
