@@ -47,7 +47,10 @@ def main() -> None:
     assert public["core"] == ">=1.0.1,<2"
     assert public["exports"] == sorted(semantics.__all__)
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
-    assert project["dependencies"] == ["meridian-storage-core>=1.0.1,<2"]
+    # Major-only jumbo declaration (Jumbo Build & Versioning Standard, section 2.2):
+    # the manifest declares the major only; resolution takes the newest promoted
+    # index record of that major. The public API bound stays in the ledger below.
+    assert project["dependencies"] == ["meridian-storage-core>=1,<2"]
 
     manifests = {"structured": structured_manifest(), "cache": cache_manifest()}
     public_catalogs = public["catalogs"]
