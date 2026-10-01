@@ -1,3 +1,3 @@
 # SPDX-License-Identifier: Apache-2.0
 # Exact public runtime dependency closure for release validation; no Core runtime dependencies.
-meridian-storage-core==1.1.0 --hash=sha256:fc7372a17993f43ec285e3d52c0e9c458ef8e6f5ce13bb2d1b01b064aa8eff49 --hash=sha256:46f7b64b706112dad0b62f768bfaf8b05f22d73d87f77702a0b3f7fd61544ca7
+meridian-storage-core==1.2.0 --hash=sha256:22e3cd77fa39972a8686e5c25f6dd469ad6a303261ab32c298c0ac12bdac6034 --hash=sha256:dfec76901b99c6ba94428bec0ef4e3520ee873dff2d33d2ab18be15fbd6fd620
