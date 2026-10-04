@@ -130,3 +130,21 @@ Copyright 2026 Meridian contributors. Licensed under Apache License 2.0; see
 Release 2.0.1 repairs dependency metadata without changing semantic contracts.
 See [dependency compatibility](docs/dependency-compatibility.md) for the API-bound
 rationale, exact public validation locks, and tested-combination limits.
+
+## Build and release (Jumbo)
+
+This repository is jumbo-managed (Jumbo Build & Versioning Standard,
+section 3.5): resolution, builds, and releases run through jumbo, never
+ad-hoc pip/uv installs.
+
+```sh
+jumbo lock   # resolve internal packages from the JumboIndex, third-party from PyPI
+jumbo build  # build + tests at the resolved closure
+```
+
+The internal dependencies (`meridian-storage-core`) are resolved from the JumboIndex;
+the lock records the exact promoted build of each. Consumers likewise
+resolve this package (`meridian-storage-semantics`) from the JumboIndex. Releases are dispatch-only through `.github/workflows/jumbo-publish.yml`;
+as a public package, external publication is driven by the jumbo-computed
+version, and every artifact's SHA-256 is recorded in the append-only
+JumboIndex.
